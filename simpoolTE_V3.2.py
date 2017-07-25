@@ -195,7 +195,7 @@ def worker3(task_q, params):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-wd',dest='wd',help='full path to working directory')
+    parser.add_argument('-wd',dest='wd',help='full path to working directory',default=-1)
     parser.add_argument('-pirs',dest='pirsPATH',help='pirs path')
     parser.add_argument('-seqtk',dest='seqtkPATH',help='seqtk path')
     parser.add_argument('-c',dest='refChrom',help='chromosome to simulate fasta format')
@@ -211,6 +211,12 @@ def main():
     parser.add_argument('-insz',dest='insz',help='insert size to simulate',type=int,  default='200')
     parser.add_argument('-t',dest='threads',help='number of threads',  type=int, default=1)
     args = parser.parse_args()
+
+    # identify current working directory
+    if args.wd == -1:
+        cwd=os.getcwd()
+    else:
+        cwd=os.path.realpath(args.wd)
 
     #Import options
     mnLen=args.minlength
@@ -273,14 +279,14 @@ def main():
         print "Simulating the insertion and deletion of %s unique TEs..." %(total_inserts)
 
     #Create new directories
-    os.system('mkdir '+args.wd+'pirs_snps')
-    os.system('mkdir '+args.wd+'teSim_simData')
-    os.system('mkdir '+args.wd+'pirs_reads')
-    os.system('mkdir '+args.wd+'teSim_pooledReads')
-    out1=args.wd+'pirs_snps/'
-    out2=args.wd+'teSim_simData/'
-    out3=args.wd+'pirs_reads/'
-    out4=args.wd+'teSim_pooledReads/'
+    os.system('mkdir '+cwd+'pirs_snps')
+    os.system('mkdir '+cwd+'teSim_simData')
+    os.system('mkdir '+cwd+'pirs_reads')
+    os.system('mkdir '+cwd+'teSim_pooledReads')
+    out1=cwd+'pirs_snps/'
+    out2=cwd+'teSim_simData/'
+    out3=cwd+'pirs_reads/'
+    out4=cwd+'teSim_pooledReads/'
 
     #Read chromosome to simulate
     print "Reading chromosome to simulate..."
